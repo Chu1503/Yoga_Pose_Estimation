@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoga Pose Estimation</title>
+    <script>
+        function startPoseDetection() {
+            var pose = document.getElementById('pose').value;
+            fetch('/start_pose_detection', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'pose=' + pose,
+            })
+                .then(response => response.text())
+                .then(message => {
+                    console.log(message);
+                });
+        }
+
+        function updateImage() {
+            var img = document.getElementById('poseImage');
+            img.src = '/video_feed?' + new Date().getTime();  // Add timestamp to avoid caching
+        }
+
+        setInterval(updateImage, 100);  // Update image every 100 milliseconds
+    </script>
+</head>
+<body>
+    <form>
+        <label for="pose">Choose Pose:</label>
+        <select id="pose">
+            <option value="Warrior Pose">Warrior Pose</option>
+            <option value="Plank Pose">Plank Pose</option>
+        </select>
+        <button type="button" onclick="startPoseDetection()">Start Pose Detection</button>
+    </form>
+    <img id="poseImage" alt="Yoga Pose Estimation">
+</body>
+</html>
